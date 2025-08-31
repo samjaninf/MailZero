@@ -9,6 +9,7 @@ export interface IGetThreadResponse {
   hasUnread: boolean;
   totalReplies: number;
   labels: { id: string; name: string }[];
+  isLatestDraft?: boolean;
 }
 
 export const IGetThreadResponseSchema = z.object({
@@ -51,9 +52,7 @@ export type ManagerConfig = {
 
 export interface MailManager {
   config: ManagerConfig;
-  getMessageAttachments(
-    id: string,
-  ): Promise<
+  getMessageAttachments(id: string): Promise<
     {
       filename: string;
       mimeType: string;
@@ -75,6 +74,7 @@ export interface MailManager {
     nextPageToken: string | null;
   }>;
   delete(id: string): Promise<void>;
+  deleteDraft(id: string): Promise<void>;
   list(params: {
     folder: string;
     query?: string;
@@ -116,6 +116,7 @@ export interface MailManager {
   getEmailAliases(): Promise<{ email: string; name?: string; primary?: boolean }[]>;
   revokeToken(token: string): Promise<boolean>;
   deleteAllSpam(): Promise<DeleteAllSpamResponse>;
+  getRawEmail(id: string): Promise<string>;
 }
 
 export interface IGetThreadsResponse {
